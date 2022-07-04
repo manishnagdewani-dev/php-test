@@ -1,0 +1,40 @@
+language: php
+dist: xenial
+
+# Adjust the version of PHP to match your production environment.
+# Making this version number greater than the production environment can have unintended consequences
+# including a non-functional prod environment.
+php: "7.4"
+
+env:
+  global:
+    - COMPOSER_BIN=$TRAVIS_BUILD_DIR/vendor/bin
+    - BLT_DIR=$TRAVIS_BUILD_DIR/vendor/acquia/blt
+    - ROOT_DIR=$TRAVIS_BUILD_DIR
+
+cache:
+  directories:
+    - "$HOME/.composer/cache"
+    - "$HOME/.drush/cache"
+  
+services:
+- mysql
+
+
+install:
+  - source ${BLT_DIR}/scripts/travis/setup_environment
+  - source ${BLT_DIR}/scripts/travis/setup_project
+
+script:
+  # Uncomment these lines to test database updates using live content.
+  # - blt drupal:sync:default:site
+  - source ${ROOT_DIR}/travis-script/run_tests
+  - source ${ROOT_DIR}/travis-script/simulate_deploy
+  #- rm -rf /tmp/blt-deploy/
+deploy:
+   - provider: script
+     script: "${ROOT_DIR}/travis-script/deploy_branch"
+     skip_cleanup: true
+     on:
+       branch: main
+       php: 7.4
