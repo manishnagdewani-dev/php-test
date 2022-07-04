@@ -21,16 +21,6 @@ services:
 - mysql
 
 
-install:
-  -# source ${BLT_DIR}/scripts/travis/setup_environment
-  -# source ${BLT_DIR}/scripts/travis/setup_project
-
-script:
-  # Uncomment these lines to test database updates using live content.
-  # - blt drupal:sync:default:site
-  -# source ${ROOT_DIR}/travis-script/run_tests
-  -# source ${ROOT_DIR}/travis-script/simulate_deploy
-  #- rm -rf /tmp/blt-deploy/
 deploy:
    - provider: script
      script: true
